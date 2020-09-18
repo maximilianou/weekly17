@@ -1,72 +1,3 @@
-### ../../../DO.md 
-# weekly17
-Learning, javascript, typescript, docker, docker-compose, openapi, react, angular, postgresql, mongodb
-
-
-References:
-
-https://levelup.gitconnected.com/setup-restful-api-with-node-js-express-mongodb-using-typescript-261959ef0998
-
-https://appdividend.com/2020/07/09/angular-authentication-system-login-and-registration-in-angular/
-
-
-### ../../../docker-compose.dev.yml 
-```
-version: "3.8" # specify docker-compose version
-
-# Define the services/containers to be run
-services:
-  cook17_angular: 
-    build: 
-      context: ./ui_angular
-      dockerfile: Dockerfile.dev
-    container_name: cook17_angular
-    volumes:
-      - ./ui_angular:/ui_angular
-      - /ui_angular/node_modules
-    ports:
-      - "4217:4200" 
-      - "49153:49153"
-    environment:
-      - NODE_ENV=dev
-
-  cook17_ts:
-    build:
-      context: ./api_ts
-      dockerfile: Dockerfile.dev
-    container_name: cook17_ts
-    volumes:
-      - ./api_ts:/api_ts
-      - /api_ts/node_modules
-    ports:
-      - "6017:3000"
-
-
-  cook17_database:
-    image: postgres
-    #restart: always
-    environment:
-      POSTGRES_PASSWORD: example
-
-  cook17_adminer:
-    image: adminer
-    #restart: always
-    ports:
-      - 9017:8080
-
-  cook17_nginx: 
-    build: loadbalancer 
-    container_name: cook17_nginx
-    ports:
-      - "8017:80" 
-    links:
-      - cook17_angular
-      - cook17_ts
-
-
-```
-### ../../../Makefile 
-```
 start:
 	docker-compose -f docker-compose.dev.yml up --build
 stop:
@@ -136,5 +67,3 @@ test_api:
 test_ui:
 	curl http://localhost:4217/
 
-
-```
