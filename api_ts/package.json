@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "clean": "rm -rf ./dist",
+    "assets": "mkdir -p ./dist/assets && cp -r ./assets/* ./dist/assets/ && chmod 777 ./dist/assets/*",
+    "tsc": "npm run clean && ./node_modules/.bin/tsc && npm run assets",
     "test": "./node_modules/.bin/ts-node ./lib/server.ts",
     "dev": "./node_modules/.bin/tsc && ./node_modules/.bin/nodemon ./dist/server.js",
     "prod": "./node_modules/.bin/tsc && ./node_modules/.bin/nodemon ./dist/server.js"

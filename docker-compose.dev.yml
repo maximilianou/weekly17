@@ -2,19 +2,19 @@ version: "3.8" # specify docker-compose version
 
 # Define the services/containers to be run
 services:
-  cook17_angular: 
-    build: 
-      context: ./ui_angular
-      dockerfile: Dockerfile.dev
-    container_name: cook17_angular
-    volumes:
-      - ./ui_angular:/ui_angular
-      - /ui_angular/node_modules
-    ports:
-      - "4217:4200" 
-      - "49153:49153"
-    environment:
-      - NODE_ENV=dev
+# cook17_angular: 
+#   build: 
+#     context: ./ui_angular
+#     dockerfile: Dockerfile.dev
+#   container_name: cook17_angular
+#   volumes:
+#     - ./ui_angular:/ui_angular
+#     - /ui_angular/node_modules
+#   ports:
+#     - "4217:4200" 
+#     - "49153:49153"
+#   environment:
+#     - NODE_ENV=dev
 
   cook17_ts:
     build:
@@ -46,6 +46,6 @@ services:
     ports:
       - "8017:80" 
     links:
-      - cook17_angular
       - cook17_ts
+#      - cook17_angular
 
