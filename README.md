@@ -1,2 +1,2 @@
 # weekly17
-Learning, javascript, typescript, docker, docker-compose, openapi, react, angular
+Learning, javascript, typescript, docker, docker-compose, openapi, react, angular, postgresql, mongodb
