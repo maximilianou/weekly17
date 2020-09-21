@@ -1,15 +1,3 @@
-### ../../../DO.md 
-# weekly17
-Learning, javascript, typescript, docker, docker-compose, openapi, react, angular, postgresql, mongodb
-
-
-References:
-
-https://levelup.gitconnected.com/setup-restful-api-with-node-js-express-mongodb-using-typescript-261959ef0998
-
-https://appdividend.com/2020/07/09/angular-authentication-system-login-and-registration-in-angular/
-
-
 ### ../../../Makefile 
 ```
 start:
@@ -24,33 +12,35 @@ doc:
 
 start_api:
 	cd api_ts && npm run dev
-ui:
-	nvm install 14
-	nvm use 14
+
+start_ui: 
+	cd ui_ng && ng serve
+
+create_ui:
+	#nvm install 14
+	#nvm use 14
 	npm install -g npm@latest
 	npm install -g @angular/cli
-	ng new ui_angular
-start_ui: 
-	cd ui_angular && ng serve
-ng8:
-	cd ui_angular && ng generate module app-routing --flat --module=app
-	cd ui_angular && ng generate component home
-	cd ui_angular && ng generate component header
-	cd ui_angular && ng generate component profile
-	cd ui_angular && ng generate component auth
-	cd ui_angular && ng generate module auth
-	cd ui_angular && ng generate service auth/auth
-	cd ui_angular && ng generate guard auth/auth
-	cd ui_angular && ng generate component auth/register
-	cd ui_angular && ng generate component auth/login
-	cd ui_angular && npm install bootstrap --save
-	cd ui_angular && npm install @auth0/angular-jwt --save
-	cd ui_angular && npm install moment --save
+	ng new ui
+	cd ui && ng generate module app-routing --flat --module=app
+	cd ui && ng generate component home
+	cd ui && ng generate component header
+	cd ui && ng generate component profile
+	cd ui && ng generate component auth
+	cd ui && ng generate module auth
+	cd ui && ng generate service auth/auth
+	cd ui && ng generate guard auth/auth
+	cd ui && ng generate component auth/register
+	cd ui && ng generate component auth/login
+	cd ui && npm install bootstrap --save
+	cd ui && npm install @auth0/angular-jwt --save
+	cd ui && npm install moment --save
+	cd ui && ng add @angular/material
 
 ng9:
-	#cd ui_angular && npm install angular-in-memory-web-api --save
-	#cd ui_angular && ng generate service InMemoryData
-	#cd ui_angular && ng generate component dish-search
+	#cd ui_ng && npm install angular-in-memory-web-api --save
+	#cd ui_ng && ng generate service InMemoryData
+	#cd ui_ng && ng generate component dish-search
 
 create_api:
 	mkdir api_ts
@@ -73,7 +63,7 @@ create_api:
 	cd api_ts && npm install --save-dev @types/jsonwebtoken @types/jwk-to-pem
 	cd api_ts && npm install --save-dev mocha @types/mocha @types/morgan @types/node @types/uuid
 	cd api_ts && npm i --save chai-http chai 
-	cd api_ts && npm i --save-dev @types/chai @types/chai-http
+	cd api_ts && npm i --save-dev @types/chai 
 
 
 test_api:
@@ -83,25 +73,37 @@ test_ui:
 
 
 ```
+### ../../../DO.md 
+# weekly17
+Learning, javascript, typescript, docker, docker-compose, openapi, react, angular, postgresql, mongodb
+
+
+References:
+
+https://levelup.gitconnected.com/setup-restful-api-with-node-js-express-mongodb-using-typescript-261959ef0998
+
+https://appdividend.com/2020/07/09/angular-authentication-system-login-and-registration-in-angular/
+
+
 ### ../../../docker-compose.dev.yml 
 ```
 version: "3.8" # specify docker-compose version
 
 # Define the services/containers to be run
 services:
-# cook17_angular: 
-#   build: 
-#     context: ./ui_angular
-#     dockerfile: Dockerfile.dev
-#   container_name: cook17_angular
-#   volumes:
-#     - ./ui_angular:/ui_angular
-#     - /ui_angular/node_modules
-#   ports:
-#     - "4217:4200" 
-#     - "49153:49153"
-#   environment:
-#     - NODE_ENV=dev
+  cook17_ng: 
+    build: 
+      context: ./ui
+      dockerfile: Dockerfile.dev
+    container_name: cook17_ng
+    volumes:
+      - ./ui:/ui
+      - /ui/node_modules
+    ports:
+      - "4217:4200" 
+      - "49153:49153"
+    environment:
+      - NODE_ENV=dev
 
   cook17_ts:
     build:
@@ -127,6 +129,22 @@ services:
     ports:
       - 9017:8080
 
+  cook17_mongo:
+    image: mongo
+    #restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  cook17_mongo_admin:
+    image: mongo-express
+    #restart: always
+    ports:
+      - 10017:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+
   cook17_nginx: 
     build: loadbalancer 
     container_name: cook17_nginx
@@ -134,7 +152,38 @@ services:
       - "8017:80" 
     links:
       - cook17_ts
-#      - cook17_angular
+      - cook17_ng
 
+
+```
+### ../../../ui/README.md 
+```
+# Ui
+
+package.json
+```
+    "start": "ng serve --disableHostCheck=true --host=0.0.0.0 ",
+    "serve": "ng serve --proxy-config proxy.conf.json",
+```
+
+proxy.conf.json
+```
+{
+  "/api_js": {
+    "target": "http://localhost:5017",
+    "secure": false
+  }
+}
+```
+
+
+```
+### ../../../api_ts/README.md 
+```
+## api_ts
+
+### openapi swagger ui, to check endpoints
+
+curl http://localhost:6017/api_ts/api-docs 
 
 ```

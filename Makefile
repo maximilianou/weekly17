@@ -10,33 +10,35 @@ doc:
 
 start_api:
 	cd api_ts && npm run dev
-ui:
-	nvm install 14
-	nvm use 14
+
+start_ui: 
+	cd ui_ng && ng serve
+
+create_ui:
+	#nvm install 14
+	#nvm use 14
 	npm install -g npm@latest
 	npm install -g @angular/cli
-	ng new ui_angular
-start_ui: 
-	cd ui_angular && ng serve
-ng8:
-	cd ui_angular && ng generate module app-routing --flat --module=app
-	cd ui_angular && ng generate component home
-	cd ui_angular && ng generate component header
-	cd ui_angular && ng generate component profile
-	cd ui_angular && ng generate component auth
-	cd ui_angular && ng generate module auth
-	cd ui_angular && ng generate service auth/auth
-	cd ui_angular && ng generate guard auth/auth
-	cd ui_angular && ng generate component auth/register
-	cd ui_angular && ng generate component auth/login
-	cd ui_angular && npm install bootstrap --save
-	cd ui_angular && npm install @auth0/angular-jwt --save
-	cd ui_angular && npm install moment --save
+	ng new ui
+	cd ui && ng generate module app-routing --flat --module=app
+	cd ui && ng generate component home
+	cd ui && ng generate component header
+	cd ui && ng generate component profile
+	cd ui && ng generate component auth
+	cd ui && ng generate module auth
+	cd ui && ng generate service auth/auth
+	cd ui && ng generate guard auth/auth
+	cd ui && ng generate component auth/register
+	cd ui && ng generate component auth/login
+	cd ui && npm install bootstrap --save
+	cd ui && npm install @auth0/angular-jwt --save
+	cd ui && npm install moment --save
+	cd ui && ng add @angular/material
 
 ng9:
-	#cd ui_angular && npm install angular-in-memory-web-api --save
-	#cd ui_angular && ng generate service InMemoryData
-	#cd ui_angular && ng generate component dish-search
+	#cd ui_ng && npm install angular-in-memory-web-api --save
+	#cd ui_ng && ng generate service InMemoryData
+	#cd ui_ng && ng generate component dish-search
 
 create_api:
 	mkdir api_ts
@@ -59,7 +61,7 @@ create_api:
 	cd api_ts && npm install --save-dev @types/jsonwebtoken @types/jwk-to-pem
 	cd api_ts && npm install --save-dev mocha @types/mocha @types/morgan @types/node @types/uuid
 	cd api_ts && npm i --save chai-http chai 
-	cd api_ts && npm i --save-dev @types/chai @types/chai-http
+	cd api_ts && npm i --save-dev @types/chai 
 
 
 test_api:
