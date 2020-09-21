@@ -1,3 +1,15 @@
+### ../../../DO.md 
+# weekly17
+Learning, javascript, typescript, docker, docker-compose, openapi, react, angular, postgresql, mongodb
+
+
+References:
+
+https://levelup.gitconnected.com/setup-restful-api-with-node-js-express-mongodb-using-typescript-261959ef0998
+
+https://appdividend.com/2020/07/09/angular-authentication-system-login-and-registration-in-angular/
+
+
 ### ../../../Makefile 
 ```
 start:
@@ -73,18 +85,6 @@ test_ui:
 
 
 ```
-### ../../../DO.md 
-# weekly17
-Learning, javascript, typescript, docker, docker-compose, openapi, react, angular, postgresql, mongodb
-
-
-References:
-
-https://levelup.gitconnected.com/setup-restful-api-with-node-js-express-mongodb-using-typescript-261959ef0998
-
-https://appdividend.com/2020/07/09/angular-authentication-system-login-and-registration-in-angular/
-
-
 ### ../../../docker-compose.dev.yml 
 ```
 version: "3.8" # specify docker-compose version
@@ -156,8 +156,17 @@ services:
 
 
 ```
+### ../../../api_ts/README.md 
+
+## api_ts
+
+### openapi swagger ui, to check endpoints
+
+curl http://localhost:6017/api_ts/api-docs 
+
+
 ### ../../../ui/README.md 
-```
+
 # Ui
 
 package.json
@@ -177,13 +186,4 @@ proxy.conf.json
 ```
 
 
-```
-### ../../../api_ts/README.md 
-```
-## api_ts
 
-### openapi swagger ui, to check endpoints
-
-curl http://localhost:6017/api_ts/api-docs 
-
-```
