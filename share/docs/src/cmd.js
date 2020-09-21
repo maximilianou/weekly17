@@ -7,8 +7,8 @@ const filesIn = [
   { path: '../../../DO.md', mark: '\n' },
   { path: '../../../Makefile', mark: '\n```\n' },
   { path: '../../../docker-compose.dev.yml', mark: '\n```\n' },
-  { path: '../../../api_ts/README.md', mark: '\n```\n' },
-  { path: '../../../ui/README.md', mark: '\n```\n' },
+  { path: '../../../api_ts/README.md', mark: '\n\n' },
+  { path: '../../../ui/README.md', mark: '\n\n' },
 ];
 const publish = (cmd) => {
   remove({ fileOut: cmd.fileOut });
