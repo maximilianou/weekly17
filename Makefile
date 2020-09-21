@@ -40,6 +40,11 @@ ng9:
 	#cd ui_ng && ng generate service InMemoryData
 	#cd ui_ng && ng generate component dish-search
 
+create_api_js:
+	mkdir api_js
+	cd api_js && npm init -y
+	cd api_js && npm install bcryptjs body-parser cors express jsonwebtoken mongoose validator 
+	cd api_js && npm install nodemon --save-dev
 create_api:
 	mkdir api_ts
 	cd api_ts && npm init -y
@@ -68,4 +73,7 @@ test_api:
 	curl http://localhost:6017/api_ts/api-docs
 test_ui:
 	curl http://localhost:4217/
+test_js:
+	curl http://localhost:5017/
+
 

@@ -1,6 +1,6 @@
 {
   "/api_js": {
-    "target": "http://localhost:5000",
+    "target": "http://api_js:5017",
     "secure": false
   }
 }

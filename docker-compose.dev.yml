@@ -15,6 +15,21 @@ services:
       - "49153:49153"
     environment:
       - NODE_ENV=dev
+    networks:
+      - default 
+
+  cook17_js:
+    build:
+      context: ./api_js
+      dockerfile: Dockerfile.dev
+    container_name: cook17_js
+    volumes:
+      - ./api_js:/api_js
+      - /api_js/node_modules
+    ports:
+      - "5017:5000"
+    networks:
+      - default 
 
   cook17_ts:
     build:
@@ -26,35 +41,47 @@ services:
       - /api_ts/node_modules
     ports:
       - "6017:3000"
+    networks:
+      - default 
 
 
   cook17_database:
     image: postgres
     #restart: always
+    container_name: postgres
     environment:
       POSTGRES_PASSWORD: example
+    networks:
+      - default
 
   cook17_adminer:
     image: adminer
-    #restart: always
+    restart: always
     ports:
       - 9017:8080
+    networks:
+      - default 
 
   cook17_mongo:
     image: mongo
     #restart: always
+    container_name: mongo
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
+    networks:
+      - default 
 
   cook17_mongo_admin:
     image: mongo-express
-    #restart: always
+    restart: always
     ports:
       - 10017:8081
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
+    networks:
+      - default 
 
   cook17_nginx: 
     build: loadbalancer 
@@ -64,4 +91,9 @@ services:
     links:
       - cook17_ts
       - cook17_ng
+      - cook17_js
+    networks:
+      - default 
 
+networks:
+  default:
