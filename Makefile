@@ -4,7 +4,7 @@ stop:
 	docker-compose -f docker-compose.dev.yml down	
 clean: 
 	docker system prune -a 
-
+	
 doc:
 	cd share/docs/src/ && node cmd.js
 
@@ -76,4 +76,12 @@ test_ui:
 test_js:
 	curl http://localhost:5017/
 
-
+info:
+	@echo "  UI Angular       : http://localhost:4017/"
+	@echo "  API Javascript   : http://localhost:5017/"
+	@echo "  API Typescript   : http://localhost:6017/"
+	@echo "  Mongo Admin      : http://localhost:10017/"
+	@echo "  Mongo            : http://localhost:27017/"
+	@echo "  Postgres Admin   : http://localhost:9017/"
+	@echo "  Postgres         : http://localhost:5432/"
+	@echo "  Nginx            : http://localhost:8017/"

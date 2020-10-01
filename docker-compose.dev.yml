@@ -17,6 +17,9 @@ services:
       - NODE_ENV=dev
     networks:
       - default 
+    depends_on:
+      - cook17_ts
+      - cook17_js
 
   cook17_js:
     build:
@@ -30,6 +33,15 @@ services:
       - "5017:5000"
     networks:
       - default 
+    depends_on:
+      - cook17_database
+      - cook17_mongo
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://cook17_mongo:27017/"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 3
+      start_period: 40s
 
   cook17_ts:
     build:
@@ -43,7 +55,20 @@ services:
       - "6017:3000"
     networks:
       - default 
+    depends_on:
+      - cook17_database
+      - cook17_mongo
 
+  cook17_adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 9017:8080
+    networks:
+      - default 
+    depends_on:
+      - cook17_database
+      - cook17_mongo
 
   cook17_database:
     image: postgres
@@ -53,14 +78,6 @@ services:
       POSTGRES_PASSWORD: example
     networks:
       - default
-
-  cook17_adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 9017:8080
-    networks:
-      - default 
 
   cook17_mongo:
     image: mongo
@@ -82,18 +99,27 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
     networks:
       - default 
+    depends_on:
+      - cook17_mongo
 
   cook17_nginx: 
     build: loadbalancer 
     container_name: cook17_nginx
+#    restart: always
     ports:
       - "8017:80" 
-    links:
+    networks:
+      - default 
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://cook17_ng:4217/"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 3
+      start_period: 40s
+    depends_on:
       - cook17_ts
       - cook17_ng
       - cook17_js
-    networks:
-      - default 
 
 networks:
   default:

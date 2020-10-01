@@ -1,7 +1,7 @@
 // UserRoute.js
 
 const express = require('express');
-const user = require('../controllers/UserController');
+const user = require(`${process.cwd()}/lib/controllers/UserController`);
 const router = express.Router();
 
 router.post('/register', user.register);

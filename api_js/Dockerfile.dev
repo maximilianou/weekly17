@@ -5,7 +5,7 @@ FROM node:14-alpine
 RUN npm set strict-ssl false
 
 # Change directory so that our commands run inside this new directory
-WORKDIR /api_ts
+WORKDIR /api_js
 # Copy dependency definitions
 COPY package.json ./
 ## installing node modules
@@ -14,4 +14,4 @@ COPY . .
 # Expose the port the app runs in
 EXPOSE 5000
 # Serve the app
-CMD [ "npm", "run", "start" ]
+CMD [ "./node_modules/.bin/nodemon","./lib/server.js" ]

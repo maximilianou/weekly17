@@ -2,7 +2,7 @@
 
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-const dbconnect = require('../DB');
+const dbconnect = require(`${process.cwd()}/lib/DB`);
 // User register
 exports.register = function (req, res) {
   const { username, email, password, passwordConfirmation } = req.body;
@@ -13,7 +13,7 @@ exports.register = function (req, res) {
   if (password != passwordConfirmation) {
     return res.status(422).json({ error: 'Password does not match' });
   }
-  await dbconnect();
+  dbconnect();
   User.findOne({ email }, function (err, existingUser) {
     if (err) {
       return res.status(422).json({ error: 'Oops! Something went Wrong' });
@@ -45,7 +45,7 @@ exports.login = function (req, res) {
   if (!email || !password) {
     return res.status(422).json({ error: 'Please provide email or password' });
   }
-  await dbconnect();
+  dbconnect();
   User.findOne({ email }, function (err, user) {
     if (err) {
       return res.status(422).json({
