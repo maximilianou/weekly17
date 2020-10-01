@@ -1,13 +1,23 @@
-### ../../../DO.md 
-# weekly17
-Learning, javascript, typescript, docker, docker-compose, openapi, react, angular, postgresql, mongodb
+### ../../../ui/README.md 
 
+# Ui
 
-References:
+package.json
+```
+    "start": "ng serve --disableHostCheck=true --host=0.0.0.0 ",
+    "serve": "ng serve --proxy-config proxy.conf.json",
+```
 
-https://levelup.gitconnected.com/setup-restful-api-with-node-js-express-mongodb-using-typescript-261959ef0998
+proxy.conf.json
+```
+{
+  "/api_js": {
+    "target": "http://localhost:5017",
+    "secure": false
+  }
+}
+```
 
-https://appdividend.com/2020/07/09/angular-authentication-system-login-and-registration-in-angular/
 
 
 ### ../../../Makefile 
@@ -18,7 +28,7 @@ stop:
 	docker-compose -f docker-compose.dev.yml down	
 clean: 
 	docker system prune -a 
-
+	
 doc:
 	cd share/docs/src/ && node cmd.js
 
@@ -54,6 +64,11 @@ ng9:
 	#cd ui_ng && ng generate service InMemoryData
 	#cd ui_ng && ng generate component dish-search
 
+create_api_js:
+	mkdir api_js
+	cd api_js && npm init -y
+	cd api_js && npm install bcryptjs body-parser cors express jsonwebtoken mongoose validator 
+	cd api_js && npm install nodemon --save-dev
 create_api:
 	mkdir api_ts
 	cd api_ts && npm init -y
@@ -82,7 +97,18 @@ test_api:
 	curl http://localhost:6017/api_ts/api-docs
 test_ui:
 	curl http://localhost:4217/
+test_js:
+	curl http://localhost:5017/
 
+info:
+	@echo "  UI Angular       : http://localhost:4017/"
+	@echo "  API Javascript   : http://localhost:5017/"
+	@echo "  API Typescript   : http://localhost:6017/"
+	@echo "  Mongo Admin      : http://localhost:10017/"
+	@echo "  Mongo            : http://localhost:27017/"
+	@echo "  Postgres Admin   : http://localhost:9017/"
+	@echo "  Postgres         : http://localhost:5432/"
+	@echo "  Nginx            : http://localhost:8017/"
 
 ```
 ### ../../../docker-compose.dev.yml 
@@ -104,6 +130,33 @@ services:
       - "49153:49153"
     environment:
       - NODE_ENV=dev
+    networks:
+      - default 
+    depends_on:
+      - cook17_ts
+      - cook17_js
+
+  cook17_js:
+    build:
+      context: ./api_js
+      dockerfile: Dockerfile.dev
+    container_name: cook17_js
+    volumes:
+      - ./api_js:/api_js
+      - /api_js/node_modules
+    ports:
+      - "5017:5000"
+    networks:
+      - default 
+    depends_on:
+      - cook17_database
+      - cook17_mongo
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://cook17_mongo:27017/"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 3
+      start_period: 40s
 
   cook17_ts:
     build:
@@ -115,45 +168,76 @@ services:
       - /api_ts/node_modules
     ports:
       - "6017:3000"
+    networks:
+      - default 
+    depends_on:
+      - cook17_database
+      - cook17_mongo
 
+  cook17_adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 9017:8080
+    networks:
+      - default 
+    depends_on:
+      - cook17_database
+      - cook17_mongo
 
   cook17_database:
     image: postgres
     #restart: always
+    container_name: postgres
     environment:
       POSTGRES_PASSWORD: example
-
-  cook17_adminer:
-    image: adminer
-    #restart: always
-    ports:
-      - 9017:8080
+    networks:
+      - default
 
   cook17_mongo:
     image: mongo
     #restart: always
+    container_name: mongo
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
+    networks:
+      - default 
 
   cook17_mongo_admin:
     image: mongo-express
-    #restart: always
+    restart: always
     ports:
       - 10017:8081
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
+    networks:
+      - default 
+    depends_on:
+      - cook17_mongo
 
   cook17_nginx: 
     build: loadbalancer 
     container_name: cook17_nginx
+#    restart: always
     ports:
       - "8017:80" 
-    links:
+    networks:
+      - default 
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://cook17_ng:4217/"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 3
+      start_period: 40s
+    depends_on:
       - cook17_ts
       - cook17_ng
+      - cook17_js
 
+networks:
+  default:
 
 ```
 ### ../../../api_ts/README.md 
@@ -165,25 +249,15 @@ services:
 curl http://localhost:6017/api_ts/api-docs 
 
 
-### ../../../ui/README.md 
+### ../../../DO.md 
+# weekly17
+Learning, javascript, typescript, docker, docker-compose, openapi, react, angular, postgresql, mongodb
 
-# Ui
 
-package.json
-```
-    "start": "ng serve --disableHostCheck=true --host=0.0.0.0 ",
-    "serve": "ng serve --proxy-config proxy.conf.json",
-```
+References:
 
-proxy.conf.json
-```
-{
-  "/api_js": {
-    "target": "http://localhost:5017",
-    "secure": false
-  }
-}
-```
+https://levelup.gitconnected.com/setup-restful-api-with-node-js-express-mongodb-using-typescript-261959ef0998
 
+https://appdividend.com/2020/07/09/angular-authentication-system-login-and-registration-in-angular/
 
 
